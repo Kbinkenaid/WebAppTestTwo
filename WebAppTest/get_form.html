@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Assessment Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        input[type="submit"] {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Security Assessment Form</h1>
+        <nav>
+            <a href="cybersecurity.html">Back to Home</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Security Assessment Questionnaire</h2>
+            <form action="process_assessment.php" method="GET">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="security_level">Current Security Level:</label>
+                    <select id="security_level" name="security_level" required>
+                        <option value="">Select your security level</option>
+                        <option value="basic">Basic (Password only)</option>
+                        <option value="medium">Medium (Password + Antivirus)</option>
+                        <option value="advanced">Advanced (Password + Antivirus + 2FA)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="concerns">Primary Security Concern:</label>
+                    <select id="concerns" name="concerns" required>
+                        <option value="">Select your main concern</option>
+                        <option value="phishing">Phishing Attacks</option>
+                        <option value="malware">Malware</option>
+                        <option value="data_breach">Data Breach</option>
+                        <option value="ransomware">Ransomware</option>
+                    </select>
+                </div>
+
+                <input type="submit" value="Submit Assessment">
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Cybersecurity Information Hub. All rights reserved.</p>
+    </footer>
+</body>
+</html>

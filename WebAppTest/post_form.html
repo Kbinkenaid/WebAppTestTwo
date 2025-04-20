@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Security Incident</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        input[type="submit"] {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        input[type="submit"]:hover {
+            background-color: var(--accent-color);
+        }
+        .urgent {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Report Security Incident</h1>
+        <nav>
+            <a href="cybersecurity.html">Back to Home</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Incident Report Form</h2>
+            <form action="process_incident.php" method="POST">
+                <div class="form-group">
+                    <label for="reporter_name">Your Name:</label>
+                    <input type="text" id="reporter_name" name="reporter_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reporter_email">Your Email:</label>
+                    <input type="email" id="reporter_email" name="reporter_email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="incident_type">Type of Incident:</label>
+                    <select id="incident_type" name="incident_type" required>
+                        <option value="">Select incident type</option>
+                        <option value="phishing">Phishing Attempt</option>
+                        <option value="malware">Malware Detection</option>
+                        <option value="breach">Data Breach</option>
+                        <option value="unauthorized">Unauthorized Access</option>
+                        <option value="ddos">DDoS Attack</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="urgency">Urgency Level:</label>
+                    <select id="urgency" name="urgency" required>
+                        <option value="low">Low - No immediate impact</option>
+                        <option value="medium">Medium - Limited impact</option>
+                        <option value="high">High - Significant impact</option>
+                        <option value="critical" class="urgent">Critical - Immediate attention required</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="incident_date">Date of Incident:</label>
+                    <input type="date" id="incident_date" name="incident_date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Detailed Description:</label>
+                    <textarea id="description" name="description" placeholder="Please provide as much detail as possible about the incident..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="affected_systems">Affected Systems/Assets:</label>
+                    <textarea id="affected_systems" name="affected_systems" placeholder="List any systems, devices, or data that may have been affected..."></textarea>
+                </div>
+
+                <input type="submit" value="Submit Incident Report">
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Cybersecurity Information Hub. All rights reserved.</p>
+    </footer>
+</body>
+</html>

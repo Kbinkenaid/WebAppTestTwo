@@ -1,0 +1,2 @@
+This is another public security report.
+It discusses common cybersecurity threats and mitigation strategies.

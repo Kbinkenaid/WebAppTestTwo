@@ -1,0 +1,2 @@
+CONFIDENTIAL: These are private notes that should only be accessible to user ID 2.
+They contain sensitive information about security vulnerabilities in the system.
